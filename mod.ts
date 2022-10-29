@@ -7,7 +7,7 @@ import {
   } from "https://deno.land/std/fmt/colors.ts";
 
 const { args: [name] } = Deno;
-
+console.info(`${name} was passed in as the arg`)
 
 const compoContent: string = `import React from 'react';
 import Styled${name} from './${name}.style.tsx';
