@@ -1,4 +1,10 @@
 import { ensureDir } from "https://deno.land/std/fs/ensure_dir.ts";
+import {
+    red,
+    yellow,
+    green,
+    bold,
+  } from "https://deno.land/std/fmt/colors.ts";
 
 const { args: [name] } = Deno;
 
@@ -87,15 +93,25 @@ Default.args = {
 `
 
 const compoPath: string = "./app/components/" + name + "/";
+console.info(yellow(`Generating boilerplate for ${bold(name)}`));
 ensureDir(compoPath)
-  .then(() => {
-    Deno.writeTextFile(compoPath + `${name}.tsx`, compoContent);
-    Deno.writeTextFile(compoPath + `${name}.style.tsx`, StyleContent);
-    Deno.writeTextFile(compoPath + `index.ts`, IndexContent);
-    Deno.writeTextFile(compoPath + `${name}.stories.tsx`, StoryContent);
+  .then( async() => {
+    await Deno.writeTextFile(compoPath + `${name}.tsx`, compoContent);
+    console.info(green(`${bold(compoPath + `${name}.tsx`)}`));
+
+    await Deno.writeTextFile(compoPath + `${name}.style.tsx`, StyleContent);
+    console.info(green(`${bold(compoPath + `${name}.style.tsx`)}`));
+
+    await Deno.writeTextFile(compoPath + `index.ts`, IndexContent);
+    console.info(green(`${bold(compoPath + `index.ts`)}`));
+
+    await Deno.writeTextFile(compoPath + `${name}.stories.tsx`, StoryContent);
+    console.info(green(`${bold(compoPath + `${name}.stories.tsx`)}`));
+
     console.info("Done!");
 })
 .catch(err => {
-    console.error(err)
+    console.info(red('error'));
+    console.error(err);
   });
 
