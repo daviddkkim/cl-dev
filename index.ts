@@ -5,6 +5,8 @@ import {
     green,
     bold,
   } from "https://deno.land/std/fmt/colors.ts";
+import { basename, dirname } from "https://deno.land/std/path/mod.ts";
+
 
 const { args: [name] } = Deno;
 console.info(`${name} was passed in as the arg`)
@@ -88,11 +90,11 @@ Default.args = {
 };
 `
 
-const compoPath: string = "~/component-library/src/components" + name + "/";
+const compoPath: string = "src/components/" + name + "/";
 
 const cwd = Deno.cwd();
-if(!cwd.includes('component-library')) {
-    console.error(red(`You are currently in ${cwd}. please navigate to jslib/component-library folder before using this tool!`));
+if(!basename(cwd).includes('component-library')) {
+    console.error(red(`You are currently in ${cwd}. Please navigate to jslib/component-library folder before using this tool!`));
     Deno.exit(1);
 }
 
