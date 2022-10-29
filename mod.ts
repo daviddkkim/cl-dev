@@ -94,5 +94,8 @@ ensureDir(compoPath)
     Deno.writeTextFile(compoPath + `index.ts`, IndexContent);
     Deno.writeTextFile(compoPath + `${name}.stories.tsx`, StoryContent);
     console.info("Done!");
-});
+})
+.catch(err => {
+    console.error(err)
+  });
 
