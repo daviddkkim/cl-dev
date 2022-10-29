@@ -18,10 +18,6 @@ children?: React.ReactNode;
 style?: React.CSSProperties;
 }
 
-
-${name}.propTypes = {
-    
-};
 const ${name} = React.forwardRef<HTMLDivElement,${name}Props>(( {children, style, ...rest}, ref) => {
     return (
         <Styled${name} style={style} {...rest}> 
