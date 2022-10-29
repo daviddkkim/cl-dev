@@ -1,18 +1,10 @@
 import { ensureDir } from "https://deno.land/std/fs/ensure_dir.ts";
-import yargs from 'https://deno.land/x/yargs@v17.6.0-deno/deno.ts'
-import { Arguments } from 'https://deno.land/x/yargs@v17.6.0-deno/deno-types.ts'
-import {
-  red,
-  yellow,
-  green,
-  bold,
-} from "https://deno.land/std/fmt/colors.ts";
+import yargs from "https://deno.land/x/yargs@v17.6.0-deno/deno.ts";
+import { Arguments } from "https://deno.land/x/yargs@v17.6.0-deno/deno-types.ts";
+import { red, yellow, green, bold } from "https://deno.land/std/fmt/colors.ts";
 import { basename, dirname } from "https://deno.land/std/path/mod.ts";
 
-
 const generateBoilerPlateCode = (name: string) => {
-
-
   console.info(`Generating boilerplate code for ${name} component`);
   const compoContent: string = `import React from 'react';
   import Styled${name} from './${name}.style.tsx';
@@ -35,19 +27,18 @@ const generateBoilerPlateCode = (name: string) => {
 
   const StyleContent: string = `import styled from 'styled-components';
   
-  export const Styled${name} = styled.div${'`'} 
+  export const Styled${name} = styled.div${"`"} 
   //Change the base HTML as needed above
   //Style goes here
-  ${'`'}
-  `
-
+  ${"`"}
+  `;
 
   const IndexContent: string = `import ${name} from './${name}';
   
   export {
       ${name}
   }
-  `
+  `;
 
   const StoryContent: string = `import React from 'react';
   import { ComponentStory, ComponentMeta } from '@storybook/react';
@@ -91,16 +82,19 @@ const generateBoilerPlateCode = (name: string) => {
     children: 'Init',
     style: {},
   };
-  `
+  `;
 
   const compoPath: string = "src/components/" + name + "/";
 
   const cwd = Deno.cwd();
-  if (!basename(cwd).includes('component-library')) {
-    console.error(red(`You are currently in ${cwd}. Please navigate to jslib/component-library folder before using this tool!`));
+  if (!basename(cwd).includes("component-library")) {
+    console.error(
+      red(
+        `You are currently in ${cwd}. Please navigate to jslib/component-library folder before using this tool!`
+      )
+    );
     Deno.exit(1);
   }
-
 
   console.info(yellow(`Generating boilerplate for ${bold(name)}`));
   ensureDir(compoPath)
@@ -120,49 +114,58 @@ const generateBoilerPlateCode = (name: string) => {
       console.info("Done!");
       Deno.exit(0);
     })
-    .catch(err => {
-      console.info(red('error'));
+    .catch((err) => {
+      console.info(red("error"));
       console.error(err);
       Deno.exit(1);
     });
-
-
-}
-
+};
 
 interface Arguments {
   generate: string;
   list: string;
   open: string;
-
 }
 
 let inputArgs: Arguments = yargs(Deno.args)
-  .usage('Usage: $0 <command> [arg]')
+  .usage("Usage: $0 <command> [arg]")
   .demandCommand(1, 1, "You can run generate or open")
-  .help('h')
-  .alias('h', 'help')
-  .command("generate", "Generate boilerplate code for given component", (yargs) => {
-    const length = yargs.argv._.length;
-    if (length !== 2) {
-      console.error(red(`You passed in ${length - 1} arguments after the generate keyword. You can only pass in one component name. For example, ${yargs.argv.$0} generate Button`));
-      Deno.exit(1);
+  .help("h")
+  .alias("h", "help")
+  .command(
+    "generate",
+    "Generate boilerplate code for given component",
+    (yargs) => {
+      const length = yargs.argv._.length;
+      if (length !== 2) {
+        console.error(
+          red(
+            `You passed in ${
+              length - 1
+            } arguments after the generate keyword. You can only pass in one component name. For example, ${
+              yargs.argv.$0
+            } generate Button`
+          )
+        );
+        Deno.exit(1);
+      }
+
+      const name = yargs.argv._[1];
+      generateBoilerPlateCode(name);
     }
-
-    const name = yargs.argv._[1];
-    generateBoilerPlateCode(name);
-
-  })
-  .example("$0 generate Button", "Generates boilerplate code to create Button component")
-  .nargs('generate', 1)
+  )
+  .example(
+    "$0 generate Button",
+    "Generates boilerplate code to create Button component"
+  )
+  .nargs("generate", 1)
   .command("open", "Opens latest Storybook in the browser", () => {
     Deno.run({
-      cmd: ["open", 'https://master--624cacae694b6d003ac979bf.chromatic.com/?path=/story/badge--default']
-    })
+      cmd: [
+        "open",
+        "https://master--624cacae694b6d003ac979bf.chromatic.com/?path=/story/badge--default",
+      ],
+    });
     return Deno.exit(0);
   })
-  .example("$0 open", "Opens latest Storybook in the browser")
-  .argv;
-
-const { args: [name] } = Deno;
-
+  .example("$0 open", "Opens latest Storybook in the browser").argv;
