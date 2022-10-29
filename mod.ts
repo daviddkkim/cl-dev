@@ -92,7 +92,15 @@ Default.args = {
 };
 `
 
-const compoPath: string = "./app/components/" + name + "/";
+const compoPath: string = "~/component-library/src/components" + name + "/";
+
+const cwd = Deno.cwd();
+if(!cwd.includes('component-library')) {
+    console.error(red(`You are currently in ${cwd}. please navigate to jslib/component-library folder before using this tool!`));
+    Deno.exit(1);
+}
+
+
 console.info(yellow(`Generating boilerplate for ${bold(name)}`));
 ensureDir(compoPath)
   .then( async() => {
@@ -109,9 +117,11 @@ ensureDir(compoPath)
     console.info(green(`${bold(compoPath + `${name}.stories.tsx`)}`));
 
     console.info("Done!");
+    Deno.exit(0);
 })
 .catch(err => {
     console.info(red('error'));
     console.error(err);
+    Deno.exit(1);
   });
 
